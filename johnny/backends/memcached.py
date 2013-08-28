@@ -11,17 +11,6 @@ import django
 from django.core.cache.backends import memcached
 
 
-class CacheClass(memcached.CacheClass):
-    """
-    By checking ``timeout is None`` rather than ``not timeout``, this
-    cache class allows for non-expiring cache writes on certain backends,
-    notably memcached.
-    """
-    def _get_memcache_timeout(self, timeout=None):
-        if timeout == 0:
-            return 0  # 2591999
-        return super(CacheClass, self)._get_memcache_timeout(timeout)
-
 if django.VERSION[:2] > (1, 2):
 
     class MemcachedCache(memcached.MemcachedCache):
@@ -61,3 +50,16 @@ if django.VERSION[:2] > (1, 2):
                 super(FailSilentlyMemcachedCache, self).set(*args, **kwargs)
             except ValueError:
                 logging.warning("Couldn't set the key for the cache")
+
+else:
+    class CacheClass(memcached.CacheClass):
+        """
+        By checking ``timeout is None`` rather than ``not timeout``, this
+        cache class allows for non-expiring cache writes on certain backends,
+        notably memcached.
+        """
+        def _get_memcache_timeout(self, timeout=None):
+            if timeout == 0:
+                return 0  # 2591999
+            return super(CacheClass, self)._get_memcache_timeout(timeout)
+
