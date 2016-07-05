@@ -93,7 +93,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
-
+assert False
 ROOT_URLCONF = 'proj.urls'
 
 TEMPLATE_DIRS = (
