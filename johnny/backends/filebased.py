@@ -14,17 +14,17 @@ from django.core.cache.backends import filebased
 
 
 class CacheClass(filebased.FileBasedCache):
-    def add(self, key, value, timeout=None, **kwargs):
+    def add(self, key, value, timeout=None, version=None, **kwargs):
         if timeout is 0:
             timeout = sys.maxint
         return super(CacheClass, self).add(
-            key, value, timeout=timeout, **kwargs)
+            key, value, timeout=timeout, version=version, **kwargs)
 
-    def set(self, key, value, timeout=None, **kwargs):
+    def set(self, key, value, timeout=None, version=None, **kwargs):
         if timeout is 0:
             timeout = sys.maxint
         return super(CacheClass, self).set(
-            key, value, timeout=timeout, **kwargs)
+            key, value, timeout=timeout, version=version, **kwargs)
 
 if django.VERSION[:2] > (1, 2):
 
