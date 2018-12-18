@@ -13,18 +13,19 @@ import django
 from django.core.cache.backends import locmem
 from django.utils.encoding import smart_str
 
+max_int = getattr(sys, 'maxint', getattr(sys, 'maxsize', ))
 
 class CacheClass(locmem.CacheClass):
 
     def add(self, key, value, timeout=None, **kwargs):
         if timeout is 0:
-            timeout = sys.maxint
+            timeout = max_int
         return super(CacheClass, self).add(
             smart_str(key), value, timeout=timeout, **kwargs)
 
     def set(self, key, value, timeout=None, **kwargs):
         if timeout is 0:
-            timeout = sys.maxint
+            timeout = max_int
         return super(CacheClass, self).set(
             smart_str(key), value, timeout=timeout, **kwargs)
 

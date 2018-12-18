@@ -12,17 +12,18 @@ from django.core.cache.backends import filebased
 # fret the encoding, and things will work alright even with unicode table
 # names
 
+max_int = getattr(sys, 'maxint', getattr(sys, 'maxsize', ))
 
 class CacheClass(filebased.FileBasedCache):
     def add(self, key, value, timeout=None, version=None, **kwargs):
         if timeout is 0:
-            timeout = sys.maxint
+            timeout = max_int
         return super(CacheClass, self).add(
             key, value, timeout=timeout, version=version, **kwargs)
 
     def set(self, key, value, timeout=None, version=None, **kwargs):
         if timeout is 0:
-            timeout = sys.maxint
+            timeout = max_int
         return super(CacheClass, self).set(
             key, value, timeout=timeout, version=version, **kwargs)
 
