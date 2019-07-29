@@ -41,7 +41,7 @@ class LocalStoreTest(TestCase):
         self.assertEquals(len(store.mget('*_2')), 1)
 
     def test_thread_locality(self):
-        from Queue import Queue
+        from queue import Queue
         try:
             from threading import Thread, current_thread
         except:

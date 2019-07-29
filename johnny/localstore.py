@@ -14,7 +14,7 @@ class LocalStore(threading.local):
     """
     def __init__(self, **d):
         threading.local.__init__(self)
-        for k, v in d.iteritems():
+        for k, v in d.items():
             threading.local.__setattr__(self, k, v)
 
     # dictionary API
@@ -35,22 +35,22 @@ class LocalStore(threading.local):
         return len(self.__dict__)
 
     def keys(self):
-        return self.__dict__.keys()
+        return list(self.__dict__.keys())
 
     def values(self):
-        return self.__dict__.values()
+        return list(self.__dict__.values())
 
     def items(self):
-        return self.__dict__.items()
+        return list(self.__dict__.items())
 
     def iterkeys(self):
-        return self.__dict__.iterkeys()
+        return iter(self.__dict__.keys())
 
     def itervalues(self):
-        return self.__dict__.itervalues()
+        return iter(self.__dict__.values())
 
     def iteritems(self):
-        return self.__dict__.iteritems()
+        return iter(self.__dict__.items())
 
     def get(self, *args):
         return self.__dict__.get(*args)
@@ -70,9 +70,9 @@ class LocalStore(threading.local):
             return {}
         expr = re.compile(fnmatch.translate(pat))
         m = {}
-        for key in self.keys():
+        for key in list(self.keys()):
             #make sure the key is a str first
-            if type(key) in (str, unicode):
+            if type(key) in (str, str):
                 if expr.match(key):
                     m[key] = self[key]
         return m
@@ -86,9 +86,9 @@ class LocalStore(threading.local):
             return self.__dict__.clear()
 
         expr = re.compile(fnmatch.translate(pat))
-        for key in self.keys():
+        for key in list(self.keys()):
             #make sure the key is a str first
-            if type(key) in (str, unicode):
+            if type(key) in (str, str):
                 if expr.match(key):
                     del self.__dict__[key]
 

@@ -23,9 +23,9 @@ def show_johnny_signals(hit=None, miss=None):
     and miss keyword args."""
     from pprint import pformat
     def _hit(*args, **kwargs):
-        print "hit:\n\t%s\n\t%s\n" % (pformat(args), pformat(kwargs))
+        print("hit:\n\t%s\n\t%s\n" % (pformat(args), pformat(kwargs)))
     def _miss(*args, **kwargs):
-        print "miss:\n\t%s\n\t%s\n" % (pformat(args), pformat(kwargs))
+        print("miss:\n\t%s\n\t%s\n" % (pformat(args), pformat(kwargs)))
     hit = hit or _hit
     miss = miss or _miss
     def deco(func):
@@ -115,7 +115,7 @@ class message_queue(object):
     will get gc'd pretty fast."""
     def __init__(self):
         from johnny.signals import qc_hit, qc_miss, qc_skip
-        from Queue import Queue as queue
+        from queue import Queue as queue
         self.q = queue()
         qc_hit.connect(self._hit)
         qc_miss.connect(self._miss)
@@ -140,7 +140,7 @@ def supports_transactions(con):
     vendor = con.vendor
     if features.get("supports_transactions", False):
         if vendor == "mysql" and not features.get('_storage_engine', '') == "InnoDB":
-            print "MySQL connection reports transactions supported but storage engine != InnoDB."
+            print("MySQL connection reports transactions supported but storage engine != InnoDB.")
             return False
         return True
     return False

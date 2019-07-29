@@ -9,11 +9,11 @@ try:
 except ImportError:
     from md5 import md5
 
-import localstore
-import signals
+from . import localstore
+from . import signals
 from johnny import settings
 from johnny.decorators import wraps, available_attrs
-from transaction import TransactionManager
+from .transaction import TransactionManager
 
 import django
 from django.core.exceptions import ImproperlyConfigured
@@ -82,7 +82,7 @@ patch,unpatch = enable,disable
 
 def resolve_table(x):
     """Return a table name for x, where x is either a model instance or a string."""
-    if isinstance(x, basestring):
+    if isinstance(x, str):
         return x
     return x._meta.db_table
 
@@ -107,7 +107,7 @@ def get_tables_for_query(query):
     """
     from django.db.models.sql.where import WhereNode
     from django.db.models.query import QuerySet
-    tables = [v[0] for v in getattr(query,'alias_map',{}).values()]
+    tables = [v[0] for v in list(getattr(query,'alias_map',{}).values())]
 
     def get_tables(node, tables):
         for child in node.children:
@@ -136,8 +136,8 @@ def timer(func):
         t0 = time.time()
         ret = func(*args, **kwargs)
         times.append(time.time() - t0)
-        print ("%d runs, %0.6f avg" %
-               (len(times), sum(times) / float(len(times))))
+        print(("%d runs, %0.6f avg" %
+               (len(times), sum(times) / float(len(times)))))
         return ret
     return foo
 
@@ -161,8 +161,8 @@ class KeyGen(object):
         Returns a key that is standard for a given table name and database
         alias. Total length up to 212 (max for memcache is 250).
         """
-        table = unicode(table)
-        db = unicode(settings.DB_CACHE_KEYS[db])
+        table = str(table)
+        db = str(settings.DB_CACHE_KEYS[db])
         if len(table) > 100:
             table = table[0:68] + self.gen_key(table[68:])
         if db and len(db) > 100:
@@ -178,7 +178,7 @@ class KeyGen(object):
 
     @staticmethod
     def _convert(x):
-        if isinstance(x, unicode):
+        if isinstance(x, str):
             return x.encode('utf-8')
         return str(x)
 
@@ -446,7 +446,7 @@ class QueryCacheBackend(object):
             except AttributeError:
                  instance._meta._fill_related_objects_cache()
 
-            for obj in instance._meta._related_objects_cache.keys():
+            for obj in list(instance._meta._related_objects_cache.keys()):
                 obj_table = obj.model._meta.db_table
                 if obj_table not in tables:
                     tables.add(obj_table)

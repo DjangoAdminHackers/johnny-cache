@@ -75,11 +75,11 @@ class Person(models.Model):
         ordering = ('last_name', 'first_name',)
 
     def __unicode__(self):
-        return u'%s' % self.full_name
+        return '%s' % self.full_name
 
     @property
     def full_name(self):
-        return u'%s %s' % (self.first_name, self.last_name)
+        return '%s %s' % (self.first_name, self.last_name)
 
     @permalink
     def get_absolute_url(self):
@@ -200,11 +200,11 @@ class Page(models.Model):
 class Milk(models.Model):
     """A meaningless model designed to test unicode ability.  This might screw
     up databases that can't handle unicode table/column names."""
-    name = models.CharField(blank=True, max_length=20, db_column=u'名前')
-    chocolate = models.BooleanField(blank=True, db_column=u'チョコレート')
+    name = models.CharField(blank=True, max_length=20, db_column='名前')
+    chocolate = models.BooleanField(blank=True, db_column='チョコレート')
 
     class Meta:
-        db_table = u'ミルク'
+        db_table = 'ミルク'
 
 
 
